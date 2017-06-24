@@ -1,14 +1,15 @@
 # Site settings
-title: Emerald | A simple Jekyll blog
-description: "A minimal blog template, build with Jekyll."
-url: "http://www.jacoporabolini.com/emerald"
+title: Regding | A personal Tech Blog
+description: "一个个人的技术类博客"
+url: "https://regding.github.io/"
 author:
-  name: "Jacopo Rabolini"
-  email: "hello@jacoporabolini.com"
-  url: "http://www.jacoporabolini.com"
+  name: "regding"
+  email: "regding@gmail.com"
+  url: "https://github.com/regding"
 
 # Build settings
-baseurl: / # Change this to your relative path (ex: /blog/), or leave just a /
+# Change this to your relative path (ex: /blog/), or leave just a /
+baseurl: /
 markdown: kramdown
 source: .
 destination: ./_site
