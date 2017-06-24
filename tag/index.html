@@ -4,13 +4,13 @@ title: "Tag"
 description: ""
 ---
 {% for tag in site.tags %}
-    <h3>{{ tag | first }}</h3>
+    <h2>{{ tag | first }}</h2>
         
     {% for posts in tag %}
         {% for post in posts %}
             {% if post.url %}
                 <li>
-                    <span>{{ post.date | date: "%B %e, %Y" }}</span> &raquo;
+                    <span>{{ post.date | date: "%e %b %Y" }}</span> &raquo;
                     <a href="{% if site.baseurl == '/' %}{{ post.url }}{% else %}{{ post.url | prepend: site.baseurl }}{% endif %}">{{ post.title }}</a></li>
             {% endif %}
         {% endfor %}
