@@ -1,0 +1,16 @@
+---
+layout: page
+title: "category"
+description: ""
+---
+{% for category in site.categories %}
+    <h3>{{ category | first }}</h3>
+    
+    {% for posts in category %}
+        {% for post in posts %}
+            {% if post.url %}
+                <li><a href="{% if site.baseurl == '/' %}{{ post.url }}{% else %}{{ post.url | prepend: site.baseurl }}{% endif %}">{{ post.title }}</a></li>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+{% endfor %}
