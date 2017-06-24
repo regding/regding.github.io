@@ -42,6 +42,7 @@ task :post do
     abort("rake aborted: '#{CONFIG['posts']}' directory not found.") unless FileTest.directory?(CONFIG['posts'])
     title = ENV["title"] || "new-post"
     tags = ENV["tags"] || "[]"
+    categories = ENV["categories"] || "[]"
     slug = title.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
     begin
         date = (ENV['date'] ? Time.parse(ENV['date']) : Time.now).strftime('%Y-%m-%d')
@@ -62,6 +63,7 @@ task :post do
         post.puts 'description: ""'
         post.puts "date: #{date}"
         post.puts "tags: #{tags}"
+        post.puts "categories: #{categories}"
         post.puts "comments: true"
         post.puts "---"
     end
@@ -73,6 +75,7 @@ task :draft do
     abort("rake aborted: '#{CONFIG['drafts']}' directory not found.") unless FileTest.directory?(CONFIG['drafts'])
     title = ENV["title"] || "new-draft"
     tags = ENV["tags"] || "[]"
+    categories = ENV["categories"] || "[]"
     slug = title.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
     begin
         date = (ENV['date'] ? Time.parse(ENV['date']) : Time.now).strftime('%Y-%m-%d')
@@ -93,6 +96,7 @@ task :draft do
         draft.puts 'description: ""'
         draft.puts "date: #{date}"
         draft.puts "tags: #{tags}"
+        post.puts "categories: #{categories}"
         draft.puts "comments: true"
         draft.puts "---"
     end
