@@ -4,7 +4,7 @@ title: "使用 Zsh 作为 Ubuntu 的默认 Shell"
 description: "在 Ubuntu 中使用 Zsh 作为默认 Shell"
 date: 2017-07-22
 tags: [Zsh, Ubuntu, oh-my-zsh]
-categories: Tech
+categories: [Tech]
 ---
 
 > Linux 发行版一般都是用 Bash Shell 作为默认的交互 Shell，Bash 提供了简洁的交互方式，以及足够多的工具用于完成任务。那么为什么要将默认交互 Shell 换成 Zsh 呢，其实是为了有一个可以友好支持 Git 的界面，以及更为简洁智能的交互方式，当然，还要美观。
