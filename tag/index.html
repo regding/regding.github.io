@@ -5,7 +5,7 @@ description: ""
 ---
 {% for tag in site.tags %}
     <h2>{{ tag | first }}</h2>
-        
+
     {% for posts in tag %}
         {% for post in posts %}
             {% if post.url %}
