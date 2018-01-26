@@ -13,6 +13,8 @@ categories: [Tech]
 * [What is WebSocket][what-is-websocket-contents-link]
 * [Why do we need WebSocket][why-do-we-need-websocket-contents-link]
 * [More details][more-details-contents-link]
+* [WebSocket Client API][websocket-client-api-contents-link]
+* [WebSocket Server API(Java)][websocket-server-api-java-contents-link]
 * [Reference][reference-contents-link]
 
 ---
@@ -20,7 +22,9 @@ categories: [Tech]
 [what-is-websocket-contents-link]: #1-what-is-websocket
 [why-do-we-need-websocket-contents-link]: #2-why-do-we-need-websocket
 [more-details-contents-link]: #3-more-details
-[reference-contents-link]: #4-reference
+[websocket-client-api-contents-link]: #4-websocket-client-api
+[websocket-server-api-java-contents-link]: #5-websocket-server-apijava
+[reference-contents-link]: #6-reference
 
 
 ### 1. What is WebSocket
@@ -169,7 +173,94 @@ Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits
 [websocket_response-img]: {{ site.url }}/assets/posts_img/websocket/WebSocket_response.png
 
 
-### 4. Reference
+### 4. WebSocket Client API
+
+对于 WebSocket 客户端，主流的浏览器(包括 PC 和移动终端)现已都支持标准的 HTML5 的 WebSocket API，这意味着客户端的 WebSocket JavaScirpt 脚本具备良好的一致性和跨平台特性，因此使用标准 HTML5 定义的 WebSocket 客户端的 JavaScript API 即可，当然也可以使用业界满足 WebSocket 标准规范的开源框架，如 [Socket.io](https://socket.io/)。
+
+下面介绍下 HTML5 定义的 WebSocket 客户端 JavaScript API怎么用。
+```javascript
+var ws = new WebSocket('wss://example.com/socket');     // 1
+
+ws.onerror = function (error) { ... }   // 2
+ws.onclose = function () { ... }    // 3
+
+ws.onopen = function () {   // 4
+  ws.send("Connection established. Hello server!");     // 5
+}
+
+ws.onmessage = function(msg) {  // 6
+  if(msg.data instanceof Blob) {    // 7
+    processBlob(msg.data);
+  } else {
+    processText(msg.data);
+  }
+}
+```
+上述示例代码中带有数字注释的行解释如下。
+
+1. 创建一个保密 WebSocket 连接，使用 wss 标识
+2. 定义一个(可选)回调函数，供当 WebSocket 连接发生错误时调用
+3. 定义一个(可选)回调函数，供当 WebSocket 连接关闭时调用
+4. 定义一个(可选)回调函数，供当 WebSocket 连接建立时调用
+5. 通过已经建立的 WebSocket 连接发送数据到服务端
+6. 定义一个回调函数，每当有来自服务端的信息时调用该回调函数
+7. 区分服务端返回的数据类型，分别调用二进制或者文本处理
+
+---
+
+
+### 5. WebSocket Server API(Java)
+
+仅有 WebSocket 客户端 API 的支持是不够的，当然还需要服务端对 WebSocket 协议的支持。这里以 Java 系为例。为支持 WebSocket，有了[JSR356规范 ](http://www.oracle.com/technetwork/articles/java/jsr356-1937161.html)，主流应用服务器厂商都已经支持。
+
+JSR356 的 WebSocket 规范使用 javax.websocket.*的 API，可以将一个普通 Java 对象(POJO)使用 @ServerEndpoint 注释作为 WebSocket 服务器的端点。以下是示例代码。
+```java
+@ServerEndpoint("/Chat")
+public class Chat {
+    @OnOpen
+    public void onOpen(Session session) throws IOException {...}
+ 
+    @OnMessage
+    public String onMessage(String message) {...}
+ 
+    @Message(maxMessageSize=6)
+    public void receiveMessage(String s) {...} 
+ 
+    @OnError
+    public void onError(Throwable t) {...}
+ 
+    @OnClose
+    public void onClose(Session session, CloseReason reason) {...} 
+}
+```
+上面的代码建立了一个 WebSocket 的服务端。@ServerEndpoint("/Chat") 的注解表示将 WebSocket 服务端运行在 ws://[Server 端 IP 或域名]:[Server 端口]/Chat 的访问端点，客户端浏览器已经可以对 WebSocket 客户端 API 发起 HTTP 长连接了。
+
+使用 @ServerEndpoint 注解的类必须有一个公共的无参数构造函数，@onMessage 注解的 Java 方法用于接收传入的 WebSocket 信息，这个信息可以是文本格式，也可以是二进制格式。
+
+@OnOpen 在一个新的连接建立时被调用。参数提供了连接的客户端的更多细节。Session 表明两个 WebSocket 端点对话连接的另一端，可以理解为类似 HTTPSession 的概念。
+
+@OnClose 在连接被终止时调用。参数 closeReason 可封装更多细节，如为什么一个 WebSocket 连接关闭。
+
+更高级的定制如 @Message 注释，MaxMessageSize 属性可以被用来定义消息字节最大限制，在上例程序中，如果超过 6 个字节的信息被接收，就报告错误和连接关闭。
+
+为了使用上述代码中用到的各种注解，需要引入 javax.websocket-api。以下是通过 Maven 来引入的例子。
+```xml
+<dependency>
+   <groupId>javax.websocket</groupId>
+   <artifactId>javax.websocket-api</artifactId>
+   <version>1.1</version>
+   <scope>provided</scope>
+</dependency>
+```
+
+这样，从客户端到服务端都已经具备了对 WebSocket 的支持，就可以通过 WebSocket 来通讯了。我自己也基于 WebSocket 做了个简单的 BBS 群聊系统放在 GitHub 上，链接在这[WebSocketBBS](https://github.com/regding/WebSocketBBS)。
+
+---
+
+
+### 6. Reference
+
+这算是一个对 WebSocket 初识，查了一些资料，也贴在了下边，更为详细的资料在这些资料中，有想了解更多的可以自行 Google。
 
 * [wikipedia 关于 WebSocket 词条的介绍(请科学上网)][reference-link-1]
 * [@Ovear关于知乎“WebSocket 是什么原理？为什么可以实现持久连接？”的回答][reference-link-2]
