@@ -107,7 +107,7 @@ categories: [Tech]
 * 轮询
 * 长轮询
 * Comet
-* Flash Socket等等
+* Flash Socket 等等
 
 这里仅稍微聊聊轮询和长轮询，其他的实现技术可以参考[服务器推送技术(请科学上网)][push-technology-link]。
 
@@ -233,7 +233,7 @@ public class Chat {
     public void onClose(Session session, CloseReason reason) {...} 
 }
 ```
-上面的代码建立了一个 WebSocket 的服务端。@ServerEndpoint("/Chat") 的注解表示将 WebSocket 服务端运行在 ws://[Server 端 IP 或域名]:[Server 端口]/Chat 的访问端点，客户端浏览器已经可以对 WebSocket 客户端 API 发起 HTTP 长连接了。
+上面的代码建立了一个 WebSocket 的服务端。@ServerEndpoint("/Chat") 的注解表示将 WebSocket 服务端运行在 ws://[Server 端 IP 或域名]:[Server 端口]/Chat 的访问端点，客户端浏览器已经可以对 WebSocket 服务端发起访问了。
 
 使用 @ServerEndpoint 注解的类必须有一个公共的无参数构造函数，@onMessage 注解的 Java 方法用于接收传入的 WebSocket 信息，这个信息可以是文本格式，也可以是二进制格式。
 
@@ -267,6 +267,7 @@ public class Chat {
 * [java WebSocket 开发入门 WebSocket][reference-link-3]
 * [WebSocket 介绍][reference-link-4]
 * [WebSocket 和 Socket 的区别][reference-link-5]
+* [WebSocket 实战][reference-link-6]
 
 ---
 
@@ -275,5 +276,6 @@ public class Chat {
 [reference-link-3]: https://www.jianshu.com/p/d79bf8174196
 [reference-link-4]: https://hpbn.co/websocket/
 [reference-link-5]: https://www.jianshu.com/p/59b5594ffbb0
+[reference-link-6]: https://www.ibm.com/developerworks/cn/java/j-lo-WebSocket/
 
 
