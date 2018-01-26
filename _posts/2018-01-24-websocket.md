@@ -11,11 +11,13 @@ categories: [Tech]
 
 ### Contents
 * [What is WebSocket][what-is-websocket-contents-link]
+* [Why do we need WebSocket][why-do-we-need-websocket-contents-link]
 * [Reference][reference-contents-link]
 
 ---
 
 [what-is-websocket-contents-link]: #1-what-is-websocket
+[why-do-we-need-websocket-contents-link]: #2-why-do-we-need-websocket
 [reference-contents-link]: #3-reference
 
 
@@ -86,6 +88,32 @@ categories: [Tech]
 [websocket-img-3]: {{ site.url }}/assets/posts_img/websocket/half_duplex.jpg
 [websocket-img-4]: {{ site.url }}/assets/posts_img/websocket/full_duplex.jpg
 [websocket-img-5]: {{ site.url }}/assets/posts_img/websocket/HTTP_persistent_connection.svg
+
+
+### 2. Why do we need WebSocket
+
+每一个技术的出现，基本上都是为了解决一些问题。那 WebSocket 的出现，是为了解决什么问题，而我们为什么需要这样一种技术呢？
+
+那来聊聊 WebSocket 的出现是为了解决什么问题。做过 Web 开发的人或许碰到过这样的需求。页面上某个地方需要展示一些`实时`的数据。比如说 Web 版本的社交应用，或许是群聊，或许是两人之间的聊天。那聊天的内容就需要实时展示在页面上。基于 HTTP 协议的 Web 应用由于没有服务端主动发送数据到客户端的能力，这种`实时`的实现就变得较为困难了。所以这种 B/S 架构的应用就需要一个能够实现服务端主动推送数据到客户端的技术。
+
+那我们为什么需要 WebSocket 呢？其实上边所说的基于 HTTP 协议来做浏览器`实时`展示服务端数据不是不能实现，只是实现上不够直接。在 WebSocket 之前，通常有以下几种实现方式。
+
+* 轮询
+* 长轮询
+* Comet
+* Flash Socket等等
+
+这里仅稍微聊聊轮询和长轮询，其他的实现技术可以参考[服务器推送技术(请科学上网)][push-technology-link]。
+
+既然 HTTP 不能由服务端直接发数据给客户端，那么就由客户端不停地问服务端有没有数据就可以了吧。这就是轮训的思路，就是由客户端每隔一段时间来发起 HTTP 请求，询问服务端有没有数据更新，如果有，就从服务端的响应中获取更新的数据，如果没有就下次再问。这样就可以做到`准实时`，如果实时性要求高，就将两次询问的时间间隔缩短即可。那么这将带来一些问题，就是每次询问都要创建 HTTP 连接，每次询问完再关闭连接，这样频繁地创建和关闭连接，将是很大的资源消耗。还有就是客户端会频繁地访问服务端，将给服务端带来很大的压力。
+
+长轮询其实就是基于 `HTTP/1.1` 版本的`持久连接`，第一次建立 HTTP 连接之后不关闭它，在这个连接上多次询问，就节省了频繁创建和销毁连接的资源。但浏览器还是会频繁访问服务端，对于服务端的压力还是没有减轻。于是 WebSocket 就出现了。
+
+WebSocket 使服务端可以主动发送数据给客户端，那么就不再需要浏览器频繁询问服务端是否有更新数据，而是服务端有更新数据时直接推送给浏览器。这样由于轮询或者长轮询带来的服务端压力自然减轻了。
+
+---
+
+[push-technology-link]: https://zh.wikipedia.org/wiki/%E6%8E%A8%E9%80%81%E6%8A%80%E6%9C%AF
 
 
 ### 3. Reference
